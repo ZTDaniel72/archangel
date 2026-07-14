@@ -1,0 +1,24 @@
+#pragma once
+
+#define PIN_RX_ROLL 34
+#define PIN_RX_PITCH 35
+#define PIN_RX_THROTTLE 32
+#define PIN_RX_AUX 33
+
+#define PIN_SERVO_AIL_L 18
+#define PIN_SERVO_AIL_R 19
+#define PIN_SERVO_ELEV 21
+#define PIN_ESC 23
+
+#define PULSE_MIN 1000
+#define PULSE_MID 1500
+#define PULSE_MAX 2000
+
+#define FAILSAFE_TIMEOUT_MS 500
+#define FAILSAFE_THROTTLE PULSE_MIN
+#define FAILSAFE_SURFACE PULSE_MID
+
+#define RATE_SPORT 1.0f
+#define RATE_GENTLE 0.6f
+
+#define LOOP_HZ 100
