@@ -22,6 +22,13 @@ Wel shall see how far in we get, I think we can achieve all, but if not, milesto
 - Motor: Surpass Hobby C2836 1120KV, 3S, 9x6 prop
 - CAD source: `cad/` (committed work-in-progress each session)
 
+## Pictures
+Current state as of 07.16:
+docs/fuselage0716.png
+docs/vtailmount0716.png
+docs/wing_preview0716.png
+docs/wtip0716.png
+
 ## Firmware
 
 Custom flight controller on ESP32 (Arduino framework). Source in repo root.
@@ -30,7 +37,7 @@ Requires the ESP32Servo library.
 ## Steps to Reproduce
 
 Start by printing the airframe. The wing comes off the plate in five modules, each printed standing on its root rib in single-wall
-LW-PLA, with density added only around the spar bores and servo pockets through a Bambu modifier volume — everywhere else stays a
+LW-PLA, with density added only around the spar bores and servo pockets through a Bambu modifier volume, everywhere else stays a
 foamed single wall to keep the tips light.
 The fuselage prints as circular segments split to fit the bed, each ending in a sleeve that slides into the next; walls run 1–1.2mm through the skin and thicken to 3mm at the joints,
 the nose ring, and the wing saddle, which print in regular PLA for stiffness.
@@ -46,13 +53,13 @@ Bolt the wing to its saddle at +1.5° with two nylon screws.
 
 
 Build the electronics as one stack. On perfboard, solder the ESP32 together with the MPU6500+BMP280 on I2C, the microSD module, a 10k/2.2k divider off the battery for voltage sensing, and the RGB status LED behind 220Ω resistors.
-Fit four servos — two ailerons in the outer wing segments, two ruddervators at the tail — each driving its surface through an arm, short pushrod and control horn, hinged with a little hole in the part that the horn pushes and then put a little rod of metal in the hole and tie it to the servo horn; no printed gears anywhere.
+Fit four servos: two ailerons in the outer wing segments, two ruddervators at the tail,each driving its surface through an arm, short pushrod and control horn, hinged with a little hole in the part that the horn pushes and then put a little rod of metal in the hole and tie it to the servo horn; no printed gears anywhere.
 Run the receiver into the ESP32's input pins, the output pins out to the four servos and the ESC, and the ESC to the motor and battery through an XT60. Mount the battery on a tray that slides fore and aft, since that slide is how you'll trim the balance.
 
 
 Flash the firmware last. Open the sketch in the Arduino IDE, install ESP32Servo, pick your board, and set every pin in config.h to match how you actually wired it.
-Fill in the V-tail mixer where the loop leaves a TODO: each ruddervator is elevator plus-or-minus rudder, and you verify the signs on the bench — both surfaces up should mean nose-up, a rudder input should send them opposite ways.
-Then bench-test with the propeller removed, always: confirm the sticks move the right surfaces the right way, kill the transmitter to prove the failsafe cuts throttle and centres everything, check dual rates on the AUX switch, and confirm the motor spins the correct direction, swapping any two motor wires if it doesn't.
+Fill in the V-tail mixer where the loop leaves a TODO: each ruddervator is elevator plus-or-minus rudder, and you verify the signs on the bench both surfaces up should mean nose-up, a rudder input should send them opposite ways.
+Then bench-test with the propeller removed, always: confirm the sticks move the right surfaces the right way, kill the transmitter to proe the failsafe cuts throttle and centres everything, check dual rates on the AUX switch, and confirm the motor spins the correct direction, swapping any two motor wires if it doesn't.
 Finish with balance and the maiden flight. Slide the battery until the CG sits about 30% of the chord back from the leading edge, erring nose-heavy because tail-heavy is the dangerous kind of wrong;
 set aileron and ruddervator throws to ±15–20°, weigh the aircraft aiming under about 900g, then hand-launch it level and firm at roughly two-thirds throttle in calm air over an open field, well 
 clear of people and within local rules. Trim for hands-off level flight on the gentle rate before you go exploring the sport rate.
