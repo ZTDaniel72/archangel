@@ -34,7 +34,7 @@ docs/wtip0716.png
 Custom flight controller on ESP32 (Arduino framework). Source in repo root.
 Requires the ESP32Servo library.
 
-## Steps to Reproduce
+## Steps to Reproduce(!! IMPORTANT !! AI WAS USED TO DESCRIBE THIS PROCESS, THIS IS NOT FINAL AND I WILL BE WRITING IT BY HAND SOON)
 
 Start by printing the airframe. The wing comes off the plate in five modules, each printed standing on its root rib in single-wall
 LW-PLA, with density added only around the spar bores and servo pockets through a Bambu modifier volume, everywhere else stays a
