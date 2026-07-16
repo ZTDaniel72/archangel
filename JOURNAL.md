@@ -1,9 +1,9 @@
-# Archangel — Development Journal
+# Archangel Development Journal
 
 -Started the project and ruminated on the exact idea of the UAV and all characteristics
 
 
-## 2026-07-14: Aileron CAD (2h 53min)
+## 2026-07-14: Aileron CAD
 
 Recording: https://lapse.hackclub.com/timelapse/XpcbddsRDkn5
 The aileron includes a very unique design that minimalizes drag, thanks to hidden servos inside the wing structure.
@@ -28,3 +28,11 @@ Some of the challenges included: the size and weight design of the tip, whilst a
 Then came the "final boss" of this CAD session: the fuselage.
 I used a clever, tube-like design for the fuselage, so that it looks realistic.
 I also made a rough design of the V-tail mount for the combined elevator and rudder design, which is also common in UAV-s today.
+
+## 2026-07-16: Telemetry, ground station and battery
+
+Today I quickly put together a simulated version of a ground station and what that would look.
+I also decided on the LoRa, for long rage telemetry, which helps extend my range up kilometers even.
+I thought through battery options and ended up on a Li-ion battery. The exact model is yet to be chosen.
+Got LW-ASA instead of LW-PLA (they delivered the wrong one) but eventually I figured that this is in my favor, since ASA is more resistant to the sun and UV compared to PLA.
+Today, i will start on the tail mixer, which is a complex code, especially because i would have to balance the operation on two wings instead of three.
