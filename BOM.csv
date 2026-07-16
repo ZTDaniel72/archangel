@@ -1,0 +1,30 @@
+Category,Part,Qty,Part number / type,Source,Unit price (HUF),Line total (HUF),Price basis,Status
+Electronics,ESP32 dev board,1,NodeMCU-ESP-32S (100.379.61),hestore.hu,2913,2913,net actual,ordered
+Electronics,IMU + barometer module,1,MPU6500-BMP280-M (100.440.23),hestore.hu,5037,5037,net actual,ordered
+Electronics,MicroSD card module,1,MICROSD-MODULE (100.420.87),hestore.hu,274,274,net actual,ordered
+Electronics,Perfboard 83x54mm,2,HS-005 (100.430.91),hestore.hu,516,1032,net actual,ordered
+Electronics,Breadboard 830pt,1,BB-102 630/200 (100.285.27),hestore.hu,1449,1449,net actual,ordered
+Electronics,Jumper wires M-M 40p,1,RC-40-10/MM (100.366.29),hestore.hu,657,657,net actual,ordered
+Electronics,Resistor 10k,10,metal film THT (100.204.46),hestore.hu,57,570,net actual,ordered
+Electronics,Resistor 2.2k,10,metal film THT (100.205.25),hestore.hu,7,70,net actual,ordered
+Electronics,Resistor 220R,10,metal film THT (100.204.34),hestore.hu,13,130,net actual,ordered
+Electronics,RGB LED 5mm common cathode,5,EVL-504-90-CC (100.375.96),hestore.hu,80,400,net actual,ordered
+Tools,Soldering station 60W,1,Fahrenheit 28005 (100.409.96),hestore.hu,5423,5423,net actual,ordered
+Tools,Soldering tips (spare),1,28005A 2-pack (100.410.34),hestore.hu,927,927,net actual,ordered
+Tools,Flux 40g,1,FP1035 (100.311.35),hestore.hu,780,780,net actual,ordered
+Powertrain,Brushless motor,1,Surpass Hobby C2836 1120KV,owned,0,0,owned,owned
+Powertrain,ESC 40A with BEC,1,TBD,RC shop,6000,6000,estimate,to buy
+Powertrain,Propeller 9x6,2,TBD,RC shop,800,1600,estimate,to buy
+Powertrain,Propeller 10x5,2,TBD,RC shop,800,1600,estimate,to buy
+Power,LiPo battery 3S 2200mAh,2,TBD,RC shop,7000,14000,estimate,to buy
+Power,LiPo balance charger,1,TBD,RC shop,8000,8000,estimate,to buy
+Power,XT60 connector pairs,3,TBD,RC shop,500,1500,estimate,to buy
+Radio,Transmitter + receiver,1,existing set,owned,0,0,owned,owned
+Servos,Servo 9g (4 needed + 2 spare),6,SG90 / MG90S,RC shop or hestore.hu,1000,6000,estimate,to buy
+Structure,Carbon spar tube 10mm x 1.3m,1,TBD,hobby/model shop,5000,5000,estimate,to buy
+Structure,Carbon rod 3-4mm (longerons/anti-rotation),2,TBD,hobby/model shop,1500,3000,estimate,to buy
+Structure,CA glue + epoxy + hinge tape,1,TBD,hobby shop,3000,3000,estimate,to buy
+Filament,LW-PLA (wing + tail skins),1,any brand ~1kg,3D shop,9000,9000,estimate,to buy
+Filament,PLA (nose ring, wing saddle, structure),1,any brand ~1kg,owned / 3D shop,6000,6000,estimate,to buy
+Filament,ASA or PA6-CF (motor mount / firewall),1,any brand ~0.5kg,3D shop,12000,12000,estimate,to buy
+TOTAL,Approx. total (net; estimates included),,,,,~101000,mixed,
