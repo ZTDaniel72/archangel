@@ -18,7 +18,7 @@ Wel shall see how far in we get, I think we can achieve all, but if not, milesto
 
 - Wingspan: ~110 cm, chord 17 cm (airfoil is a variation of this: http://airfoiltools.com/airfoil/details?airfoil=naca2412-il)
 - Wing printed in 5 modules on a Bambu Lab P1S (25.6 cm bed), joined on a 10 mm carbon spar
-- Ailerons: trailing 25% of chord on outer segments, 9g servo + pushrod per side
+- Ailerons: Incorporated into the wing structure
 - Motor: Surpass Hobby C2836 1120KV, 3S, 9x6 prop
 - CAD source: `cad/` (committed work-in-progress each session)
 
