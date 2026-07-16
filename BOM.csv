@@ -27,4 +27,8 @@ Structure,CA glue + epoxy + hinge tape,1,TBD,hobby shop,3000,3000,estimate,to bu
 Filament,LW-PLA (wing + tail skins),1,any brand ~1kg,3D shop,9000,9000,estimate,to buy
 Filament,PLA (nose ring, wing saddle, structure),1,any brand ~1kg,owned / 3D shop,6000,6000,estimate,to buy
 Filament,ASA or PA6-CF (motor mount / firewall),1,any brand ~0.5kg,3D shop,12000,12000,estimate,to buy
-TOTAL,Approx. total (net; estimates included),,,,,~101000,mixed,
+Telemetry,LoRa module - plane (868MHz EU),1,RFM95W / SX1276 868MHz,RC/electronics shop,3200,3200,estimate,to buy
+Telemetry,LoRa module - ground (868MHz EU),1,RFM95W / SX1276 868MHz,RC/electronics shop,3200,3200,estimate,to buy
+Telemetry,868MHz antenna,2,SMA/uFL whip,RC/electronics shop,800,1600,estimate,to buy
+Telemetry,ESP32 - ground LoRa bridge,1,NodeMCU-ESP-32S,hestore.hu,2913,2913,estimate,to buy
+TOTAL,Approx. total (net; estimates included),,,,,~112000,mixed,

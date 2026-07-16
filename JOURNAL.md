@@ -18,6 +18,9 @@ I implemented a failsafe, dual rates and also coded the receiver pass-through
 
 ## 2026-07-15: Fuselage, Tail mount and more wing improvements + wingtip
 
+Recording: https://lapse.hackclub.com/timelapse/FDi42ch49GMw
+Another recording: https://lapse.hackclub.com/timelapse/CiaGbsH7okC-
+
 This day was one of my largest so far, I sat down for a good while, just contemplating the best design choices.
 I started off with some minor improvements to yesterday's wing shape and design, which also led me down a rabbit hole of efficient airfoils.
 The wingtip was also designed this day, with a lot of hard streches, but I managed to figure out the design.
