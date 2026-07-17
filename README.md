@@ -24,10 +24,14 @@ Wel shall see how far in we get, I think we can achieve all, but if not, milesto
 
 ## Pictures
 Current state as of 07.16:
-docs/fuselage0716.png
-docs/vtailmount0716.png
-docs/wing_preview0716.png
-docs/wtip0716.png
+
+![Fuselage](docs/fuselage0716.png)
+
+![V-tail mount](docs/vtailmount0716.png)
+
+![Wing preview](docs/wing_preview0716.png)
+
+![Wingtip](docs/wtip0716.png)
 
 ## Firmware
 
