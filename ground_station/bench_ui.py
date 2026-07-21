@@ -1,6 +1,6 @@
 
+
 import math
-import random
 import sys
 import threading
 import time
@@ -11,8 +11,11 @@ PULSE_MIN, PULSE_MID, PULSE_MAX = 1000, 1500, 2000
 state = {
     "roll": 1500, "pitch": 1500, "thr": 1000, "rudd": 1500, "aux": 1000,
     "ailL": 1500, "ailR": 1500, "ruddL": 1500, "ruddR": 1500,
-    "healthy": 0, "last_rx": 0.0,
+    "healthy": 0, "imu_roll": 0.0, "imu_pitch": 0.0, "last_rx": 0.0,
 }
+
+INT_KEYS = ["roll", "pitch", "thr", "rudd", "aux",
+            "ailL", "ailR", "ruddL", "ruddR", "healthy"]
 
 
 def parse_line(line):
@@ -20,13 +23,13 @@ def parse_line(line):
     if not line.startswith("ABN,"):
         return
     p = line.split(",")
-    if len(p) != 11:
+    if len(p) != 13:
         return
     try:
-        keys = ["roll", "pitch", "thr", "rudd", "aux",
-                "ailL", "ailR", "ruddL", "ruddR", "healthy"]
-        for k, v in zip(keys, p[1:]):
+        for k, v in zip(INT_KEYS, p[1:11]):
             state[k] = int(v)
+        state["imu_roll"] = float(p[11])
+        state["imu_pitch"] = float(p[12])
         state["last_rx"] = time.time()
     except ValueError:
         pass
@@ -48,8 +51,11 @@ def sim_thread():
         ailL = roll
         ailR = 2 * PULSE_MID - roll
         healthy = 0 if int(t) % 12 >= 10 else 1
+        imu_roll = 35 * math.sin(t * 0.7)
+        imu_pitch = 20 * math.sin(t * 0.5)
         parse_line(f"ABN,{roll},{pitch},{thr},{rudd},{aux},"
-                   f"{ailL},{ailR},{ruddL},{ruddR},{healthy}")
+                   f"{ailL},{ailR},{ruddL},{ruddR},{healthy},"
+                   f"{imu_roll:.1f},{imu_pitch:.1f}")
 
 
 def serial_thread(port):
@@ -64,8 +70,17 @@ def serial_thread(port):
             parse_line(raw)
 
 
-BG, PANEL, FG, ACCENT, WARN, OK = ("#10141c", "#1a2230", "#d7e0ee",
-                                   "#4da3ff", "#ff4d5e", "#39d98a")
+
+BG = "#000000"
+PANEL = "#141a24"
+EDGE = "#2a3546"
+FG = "#d7e0ee"
+MUTE = "#7f92b0"
+ACCENT = "#4da3ff"
+WARN = "#ff4d5e"
+OK = "#39d98a"
+SKY = "#2f6fb0"
+GROUND = "#6b4a2a"
 
 
 class App:
@@ -73,15 +88,15 @@ class App:
         self.root = root
         root.title("ARCHANGEL bench station")
         root.configure(bg=BG)
-        self.c = tk.Canvas(root, width=900, height=560, bg=BG,
+        self.c = tk.Canvas(root, width=900, height=600, bg=BG,
                            highlightthickness=0)
         self.c.pack(padx=10, pady=10)
         self.mode = mode
         self.tick()
 
-    def bar(self, x, y, w, h, frac, label, value, color=ACCENT):
+    def bar(self, x, y, w, h, frac, label, value, color):
         c = self.c
-        c.create_rectangle(x, y, x + w, y + h, outline="#2c3a52", width=1,
+        c.create_rectangle(x, y, x + w, y + h, outline=EDGE, width=1,
                            fill=PANEL)
         frac = max(0.0, min(1.0, frac))
         c.create_rectangle(x + 2, y + 2, x + 2 + (w - 4) * frac, y + h - 2,
@@ -97,8 +112,71 @@ class App:
         y2 = cy - length * math.sin(a)
         self.c.create_line(cx, cy, x2, y2, fill=ACCENT, width=6,
                            capstyle="round")
-        self.c.create_text(cx, cy + 16, text=label, fill=FG,
+        self.c.create_text(cx, cy + 16, text=label, fill=MUTE,
                            font=("Consolas", 9))
+
+    def horizon(self, cx, cy, r, roll_deg, pitch_deg):
+        c = self.c
+        rr = math.radians(roll_deg)
+        cos, sin = math.cos(rr), math.sin(rr)
+        off = max(-r, min(r, pitch_deg * 3.0))   
+
+        N = 96
+        circle = [(r * math.cos(2 * math.pi * i / N),
+                   r * math.sin(2 * math.pi * i / N)) for i in range(N)]
+
+        def dist(pt):
+            return (-pt[0] * sin + pt[1] * cos) - off
+
+        def clip(keep_below):
+            out = []
+            n = len(circle)
+            for i in range(n):
+                a = circle[i]
+                b = circle[(i + 1) % n]
+                fa, fb = dist(a), dist(b)
+                ina = (fa >= 0) if keep_below else (fa <= 0)
+                inb = (fb >= 0) if keep_below else (fb <= 0)
+                if ina:
+                    out.append(a)
+                if ina != inb and fa != fb:
+                    t = fa / (fa - fb)
+                    out.append((a[0] + t * (b[0] - a[0]),
+                                a[1] + t * (b[1] - a[1])))
+            return out
+
+        def to_screen(poly):
+            flat = []
+            for (x, y) in poly:
+                flat += [cx + x, cy + y]
+            return flat
+
+        sky = clip(keep_below=False)   
+        gnd = clip(keep_below=True)      
+        if len(sky) >= 3:
+            c.create_polygon(to_screen(sky), fill=SKY, outline="")
+        if len(gnd) >= 3:
+            c.create_polygon(to_screen(gnd), fill=GROUND, outline="")
+
+        t = math.sqrt(max(0.0, r * r - off * off))
+        p0 = (-off * sin, off * cos)
+        d = (cos, sin)
+        i1 = (cx + p0[0] + t * d[0], cy + p0[1] + t * d[1])
+        i2 = (cx + p0[0] - t * d[0], cy + p0[1] - t * d[1])
+        c.create_line(i1[0], i1[1], i2[0], i2[1], fill="white", width=2)
+
+        c.create_oval(cx - r, cy - r, cx + r, cy + r, outline=EDGE, width=4)
+    
+        c.create_line(cx - 28, cy, cx - 9, cy, fill="#ffd633", width=3)
+        c.create_line(cx + 9, cy, cx + 28, cy, fill="#ffd633", width=3)
+        c.create_oval(cx - 2, cy - 2, cx + 2, cy + 2, fill="#ffd633",
+                      outline="")
+
+        c.create_text(cx, cy - r - 14, text="ATTITUDE (IMU)", fill=MUTE,
+                      font=("Consolas", 11, "bold"))
+        c.create_text(cx, cy + r + 16,
+                      text=f"R {roll_deg:+6.1f}   P {pitch_deg:+6.1f}",
+                      fill=FG, font=("Consolas", 11))
 
     def tick(self):
         s = dict(state)
@@ -108,55 +186,56 @@ class App:
         stale = time.time() - s["last_rx"] > 1.0
         healthy = s["healthy"] and not stale
 
-        # header
         c.create_text(20, 24, text="ARCHANGEL BENCH STATION", fill=FG,
                       anchor="w", font=("Consolas", 16, "bold"))
-        status = "LINK OK" if healthy else "FAILSAFE / NO LINK"
-        c.create_rectangle(690, 10, 890, 40, fill=(OK if healthy else WARN),
-                           width=0)
-        c.create_text(790, 25, text=status, fill="#08101c",
+        status = "LINK OK" if healthy else "NO LINK / FAILSAFE"
+        c.create_rectangle(700, 12, 884, 38, outline=(OK if healthy else WARN),
+                           width=2, fill=PANEL)
+        c.create_text(792, 25, text=status, fill=(OK if healthy else WARN),
                       font=("Consolas", 11, "bold"))
         mode = "SPORT" if s["aux"] > PULSE_MID else "GENTLE"
-        c.create_text(20, 50, text=f"rates: {mode}   source: {self.mode}",
-                      fill="#7f92b0", anchor="w", font=("Consolas", 10))
+        c.create_text(20, 48, text=f"rates {mode}    source {self.mode}",
+                      fill=MUTE, anchor="w", font=("Consolas", 10))
 
-        c.create_text(20, 86, text="RC INPUT", fill="#7f92b0", anchor="w",
+        c.create_text(20, 84, text="RC INPUT", fill=MUTE, anchor="w",
                       font=("Consolas", 11, "bold"))
         chans = [("ROLL", s["roll"]), ("PITCH", s["pitch"]),
                  ("THROTTLE", s["thr"]), ("RUDDER", s["rudd"]),
                  ("AUX", s["aux"])]
-        y = 110
+        y = 108
         for name, v in chans:
             frac = (v - PULSE_MIN) / (PULSE_MAX - PULSE_MIN)
-            color = ACCENT if healthy else "#5a6a85"
-            self.bar(20, y, 380, 20, frac, name, v, color)
-            y += 52
+            self.bar(20, y, 360, 18, frac, name, v,
+                     ACCENT if healthy else "#41506a")
+            y += 46
 
-        c.create_text(480, 86, text="MIXER OUTPUT", fill="#7f92b0",
-                      anchor="w", font=("Consolas", 11, "bold"))
+        c.create_text(430, 84, text="MIXER OUTPUT", fill=MUTE, anchor="w",
+                      font=("Consolas", 11, "bold"))
         outs = [("AIL L", s["ailL"]), ("AIL R", s["ailR"]),
                 ("RUDDV L", s["ruddL"]), ("RUDDV R", s["ruddR"])]
-        y = 110
+        y = 108
         for name, v in outs:
             frac = (v - PULSE_MIN) / (PULSE_MAX - PULSE_MIN)
-            self.bar(480, y, 380, 20, frac, name, v,
-                     OK if healthy else "#5a6a85")
-            y += 52
+            self.bar(430, y, 360, 18, frac, name, v,
+                     OK if healthy else "#41506a")
+            y += 46
 
-        c.create_text(480, 340, text="V-TAIL (rear view)", fill="#7f92b0",
-                      anchor="w", font=("Consolas", 11, "bold"))
-        base_x, base_y = 670, 470
-        defl_l = (s["ruddL"] - PULSE_MID) / 500.0 * 25
-        defl_r = (s["ruddR"] - PULSE_MID) / 500.0 * 25
-        c.create_oval(base_x - 18, base_y - 18, base_x + 18, base_y + 18,
-                      outline="#2c3a52", width=2, fill=PANEL)
-        self.surface(base_x, base_y, 145 - defl_l, 110, "L")
-        self.surface(base_x, base_y, 35 + defl_r, 110, "R")
+        self.horizon(170, 470, 92, s["imu_roll"], s["imu_pitch"])
+
+        c.create_text(560, 372, text="V-TAIL", fill=MUTE, anchor="w",
+                      font=("Consolas", 11, "bold"))
+        bx, by = 660, 480
+        c.create_oval(bx - 16, by - 16, bx + 16, by + 16, outline=EDGE,
+                      width=2, fill=PANEL)
+        self.surface(bx, by, 145 - (s["ruddL"] - PULSE_MID) / 500.0 * 25,
+                     104, "L")
+        self.surface(bx, by, 35 + (s["ruddR"] - PULSE_MID) / 500.0 * 25,
+                     104, "R")
 
         if s["thr"] > 1150:
-            c.create_text(20, 380, anchor="w", fill=WARN,
+            c.create_text(450, 576, anchor="center", fill=WARN,
                           font=("Consolas", 11, "bold"),
-                          text="THROTTLE LIVE - PROPS OFF!")
+                          text="THROTTLE LIVE  -  PROPS OFF")
 
         self.root.after(50, self.tick)
 

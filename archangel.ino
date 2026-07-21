@@ -1,11 +1,14 @@
 #include "config.h"
 #include "receiver.h"
 #include "outputs.h"
+#include "imu.h"
 
 void setup() {
     Serial.begin(115200);
     rxInit();
     outputsInit();
+    Serial.println("stay still, calibrating IMU...");
+    imuInit();
     Serial.println("online, ready for start");
 }
 
@@ -18,6 +21,7 @@ void loop() {
   static uint32_t lastRun = 0;
   if (millis() - lastRun < (1000 / LOOP_HZ)) return;
   lastRun = millis();
+  imuUpdate();
 
   uint16_t roll  = rxGet(RX_ROLL);
   uint16_t pitch = rxGet(RX_PITCH);
@@ -52,8 +56,8 @@ void loop() {
   static uint32_t lastPrint = 0;
   if (millis() - lastPrint > 100) {
     lastPrint = millis();
-    Serial.printf("ABN,%u,%u,%u,%u,%u,%u,%u,%u,%u,%d\n",
-                  roll, pitch, thr, rudd, aux,
-                  ailL, ailR, ruddL, ruddR, (int)rxHealthy());
+    Serial.printf("ABN,%u,%u,%u,%u,%u,%u,%u,%u,%u,%d,%.1f,%.1f\n",
+            roll, pitch, thr, rudd, aux,
+            ailL, ailR, ruddL, ruddR, (int)rxHealthy(), imuRoll(), imuPitch());
   }
 }
