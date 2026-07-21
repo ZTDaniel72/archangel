@@ -4,10 +4,12 @@
 #define PIN_RX_PITCH 35
 #define PIN_RX_THROTTLE 32
 #define PIN_RX_AUX 33
+#define PIN_RX_RUDD 25
 
 #define PIN_SERVO_AIL_L 18
 #define PIN_SERVO_AIL_R 19
-#define PIN_SERVO_ELEV 21
+#define PIN_SERVO_RUDD_L 21   
+#define PIN_SERVO_RUDD_R 22   
 #define PIN_ESC 23
 
 #define PULSE_MIN 1000
