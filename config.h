@@ -11,6 +11,9 @@
 #define PIN_SERVO_RUDD_L 21   
 #define PIN_SERVO_RUDD_R 22   
 #define PIN_ESC 23
+#define PIN_LED_R 13
+#define PIN_LED_G 14
+#define PIN_LED_B 27
 
 #define PULSE_MIN 1000
 #define PULSE_MID 1500
@@ -22,5 +25,12 @@
 
 #define RATE_SPORT 1.0f
 #define RATE_GENTLE 0.6f
+#define STAB_GAIN 2.0f
+#define PID_KP 4.0f
+#define PID_KI 0.5f
+#define PID_KD 2.0f
+#define PID_ILIMIT 200.0f
+#define PID_MAXANGLE 45.0f
+
 
 #define LOOP_HZ 100

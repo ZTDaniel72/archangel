@@ -4,4 +4,7 @@
 void  imuInit();  
 void  imuUpdate(); 
 float imuRoll();   
-float imuPitch();   
+float imuPitch();
+float imuAlt();
+float imuRollRate();
+float imuPitchRate();

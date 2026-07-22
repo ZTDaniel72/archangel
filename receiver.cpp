@@ -14,7 +14,7 @@ static uint32_t lastRawW = 0;   // last width measured, unfiltered (debug)
 
 void rxInit() {
     for (int i = 0; i < RX_CHANNEL_COUNT; i++) {
-        pinMode(rxPins[i], INPUT);
+        pinMode(rxPins[i], INPUT_PULLDOWN);
     }
 }
 

@@ -11,7 +11,7 @@ PULSE_MIN, PULSE_MID, PULSE_MAX = 1000, 1500, 2000
 state = {
     "roll": 1500, "pitch": 1500, "thr": 1000, "rudd": 1500, "aux": 1000,
     "ailL": 1500, "ailR": 1500, "ruddL": 1500, "ruddR": 1500,
-    "healthy": 0, "imu_roll": 0.0, "imu_pitch": 0.0, "last_rx": 0.0,
+    "healthy": 0, "imu_roll": 0.0, "imu_pitch": 0.0, "imu_alt": 0.0, "last_rx": 0.0,
 }
 
 INT_KEYS = ["roll", "pitch", "thr", "rudd", "aux",
@@ -23,13 +23,14 @@ def parse_line(line):
     if not line.startswith("ABN,"):
         return
     p = line.split(",")
-    if len(p) != 13:
+    if len(p) != 14:
         return
     try:
         for k, v in zip(INT_KEYS, p[1:11]):
             state[k] = int(v)
         state["imu_roll"] = float(p[11])
         state["imu_pitch"] = float(p[12])
+        state["imu_alt"] = float(p[13])
         state["last_rx"] = time.time()
     except ValueError:
         pass
@@ -53,9 +54,10 @@ def sim_thread():
         healthy = 0 if int(t) % 12 >= 10 else 1
         imu_roll = 35 * math.sin(t * 0.7)
         imu_pitch = 20 * math.sin(t * 0.5)
+        alt = 20 + 15 * math.sin(t * 0.35)
         parse_line(f"ABN,{roll},{pitch},{thr},{rudd},{aux},"
                    f"{ailL},{ailR},{ruddL},{ruddR},{healthy},"
-                   f"{imu_roll:.1f},{imu_pitch:.1f}")
+                   f"{imu_roll:.1f},{imu_pitch:.1f}, {alt:.1f}")
 
 
 def serial_thread(port):
@@ -114,12 +116,29 @@ class App:
                            capstyle="round")
         self.c.create_text(cx, cy + 16, text=label, fill=MUTE,
                            font=("Consolas", 9))
+    
+    def alt_tape(self, x, y, h, alt):
+        c = self.c
+        w = 24
+        c.create_rectangle(x, y, x+w, y+h, outline=EDGE, width=1, fill=PANEL)
+        lo, hi = -10.0, 60.0
+        def yfor(a):
+            a = max(lo, min(hi,a))
+            return y + h - (a - lo) / (hi-lo) * h
+        for a in range(-10, 61, 10):
+            ty = yfor(a)
+            c.create_line(x, ty, x + 5, ty, fill=MUTE)
+            c.create_text(x+w+3, ty, text=str(a), fill=MUTE, anchor="w", font=("Consolas", 7))
+        ind = yfor(alt)
+        c.create_line(x-3, ind, x+w+3, ind, fill=ACCENT, width=2)
+        c.create_text(x+w / 2, y-10, text="ALT m", fill=MUTE, font=("Consolas", 9, "bold"))
+        c.create_text(x+w / 2, y+h+12, text=f"{alt:+.1f}", fill=FG, font=("Consolas", 10, "bold"))
 
     def horizon(self, cx, cy, r, roll_deg, pitch_deg):
         c = self.c
-        rr = math.radians(roll_deg)
+        rr = math.radians(-roll_deg)
         cos, sin = math.cos(rr), math.sin(rr)
-        off = max(-r, min(r, pitch_deg * 3.0))   
+        off = max(-r, min(r, -pitch_deg * 3.0))   
 
         N = 96
         circle = [(r * math.cos(2 * math.pi * i / N),
@@ -221,6 +240,8 @@ class App:
             y += 46
 
         self.horizon(170, 470, 92, s["imu_roll"], s["imu_pitch"])
+
+        self.alt_tape(300, 392, 150, s["imu_alt"])
 
         c.create_text(560, 372, text="V-TAIL", fill=MUTE, anchor="w",
                       font=("Consolas", 11, "bold"))

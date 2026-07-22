@@ -59,3 +59,22 @@ In the next following days, I will be printing the airframe, and ordering the el
 
 All of the videos recorded during this session will be as an unlisted youtube link
 You can find it here: https://youtube.com/shorts/0uXKaofNkJc?feature=share
+
+## 2026-07-22: Major improvements
+
+Today brought major improvements to both software, electronics, airframe and logistics.
+In the software department, I:
+1. folded the bmp 280 barometer into the firmware, so now we can track altitude. also added it to the desktop dashboard and it looks cleaner than ever.
+2. i built gyro rate damping, which evolved into a !!FULL-SELF-LEVELLING PID CONTROLLER!! (it basically returns to level flight with a couple complicated calculations)
+3. Reworked mode logic, after discovering that the FS-T4B is only 4 channel.
+4. added an RGB status LED (blue calibrating, red failsafe, green armed/ok)
+5. Hardened the failsafe with pull.down resistors on the input pins, therefore getting rid of phantom signals.
+6. Added WiFi Phone Telemetry: The ESP32 now hosts its own wifi, and anyone can join it from their phone, then visit a live dashboard from their browser. This will work great for showing it to larger audiences, etc.
+Whilst on the electronics:
+1. Wired and bench-tested the motor+esc config, worked really well even though i didnt have a clamp so i had to hold the motor in my hands lol (dont try at home), it also showed on the ground station
+2. Learned power architecture
+3. charged the LiPo, so it can be used for flight.
+Airframe: Fought (and hopefully) solved LW-ASA bed warping and major stringing. the filament seems to be damp, so I'll look into drying options. I also made the airframe more "3d printer friendly"
+Logistics: Confirmed that I dont need a visa for Singapore, since I have a Hungarian passport. I also sorted out the spar plan(12mm tube, 1000mm long)
+
+I am excited for the following days, cant wait to make a new demo video and re-ship once I have the 35 hours. I am getting really close!!
