@@ -38,7 +38,7 @@ Current state as of 07.24:
 Custom flight controller on ESP32 (Arduino framework). Source in repo root.
 Requires the ESP32Servo library.
 
-## Steps to Reproduce(!! IMPORTANT !! AI WAS USED TO DESCRIBE THIS PROCESS, THIS IS NOT FINAL AND I WILL BE WRITING IT BY HAND SOON)
+## Steps to Reproduce
 
 Start with printing the airframe. It it important that you use a LW material, like LW-ASA, which I am using for most of this print. The parts that arent LW-ASA are because that it simply doesnt have the precise properties
 as other materials, such as PETG. i am printing the aileron wing structure in PETG for example. The entire wing consists of 11 pieces total. This is all for structural integrity.
