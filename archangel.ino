@@ -4,9 +4,13 @@
 #include "imu.h"
 #include "led.h"
 #include "webui.h"
+#include "sdlog.h"
+#include "loralink.h"
 
 void setup() {
     Serial.begin(115200);
+    pinMode(2, OUTPUT);  digitalWrite(2, HIGH);  
+    pinMode(26, OUTPUT); digitalWrite(26, HIGH);   
     rxInit();
     outputsInit();
     ledInit();
@@ -15,6 +19,8 @@ void setup() {
     imuInit();
     webuiInit();
     Serial.println("wifi up: connect to ARCHANGEL, open 192.168.4.1");
+    Serial.println(sdInit() ? "Sd logging" : "sd fail");
+    Serial.println(loraInit() ? "LoRa TX ready" : "LoRa FAIL - check wiring");
     Serial.println("online, ready for start");
 }
 
@@ -68,6 +74,16 @@ void loop() {
     ailL = ailR = ruddL = ruddR = FAILSAFE_SURFACE;
     thr = FAILSAFE_THROTTLE;
     outputsFailsafe();
+  }
+  static uint32_t lastSd = 0;
+  if (millis() - lastSd >= 100) {
+    lastSd = millis();
+    sdLog(imuRoll(), imuPitch(), imuAlt(), thr, rxHealthy());
+  }
+  static uint32_t lastLora = 0;
+  if (millis() - lastLora >= 250) {
+    lastLora = millis();
+    loraSend(imuRoll(), imuPitch(), imuAlt(), thr, rxHealthy());
   }
   webuiSet(imuRoll(), imuPitch(), imuAlt(), thr, rxHealthy());
   if (!rxHealthy()) ledSet(0,1,0);

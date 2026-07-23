@@ -78,3 +78,23 @@ Airframe: Fought (and hopefully) solved LW-ASA bed warping and major stringing. 
 Logistics: Confirmed that I dont need a visa for Singapore, since I have a Hungarian passport. I also sorted out the spar plan(12mm tube, 1000mm long)
 
 I am excited for the following days, cant wait to make a new demo video and re-ship once I have the 35 hours. I am getting really close!!
+
+## 2026-07-23: The big day
+
+I finally hit 35 hours, even surpassing that!
+Today I did a lot of hardware stuff, mainly:
+Solving SD card logging: It now logs flight telemetry data onto the SD card, and records every moment on the aircraft. Basically its "Black box".
+The big one: LoRa long range telemetry links:
+1. I soldered the RFM95W radio onto the flight controller, which was a well-fought battle-
+2. Got SD and LoRa sharing one SPI Bus, which solved the chip-select conflict that came up during testing.
+3. Wrote the plane side transmitter, now hooked up to LoRa.
+4. Built the ground bridge, on my SECOND esp32. Soldered a whooooole new LoRa module all over again, which was once again a big pain, but in the end I figured it out.
+
+Materials, design:
+I decided that LW-ASA was not a good option for the integrated aileron wing design, since its foaming all over the place. Therefore, I went with PETG.
+Redesigned the spar as a two-piece joined spar, since it has to fit into my carry on loll
+
+AND finally, I BOUGHT THE TICKETS TO ARCANA!!
+Singapore, IM ON MY WAY
+
+Cant wait for what tomorrow holds.
